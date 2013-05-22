@@ -233,7 +233,7 @@ exports.search = function(req, res, next) {
       switch (format) { 
         case 'html':
         case 'htm':
-            res.render('posts/resoults', {
+            res.render('posts/index', {
               posts: posts
             });
             break;
