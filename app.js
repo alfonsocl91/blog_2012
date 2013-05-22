@@ -6,14 +6,17 @@
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
+  , about = require('./routes/about')
   , http = require('http')
   , path = require('path')
   , partials = require('express-partials')
-  , postController = require('./routes/post_controller.js');
+  , postController = require('./routes/post_controller.js')
+  , count = require('./count.js');
 
 var app = express();
 
 app.use(partials());
+app.use(count());
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -63,3 +66,6 @@ app.delete('/posts/:postid([0-9]+)', postController.destroy);
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
+
+//---------------------
+app.get('/about', about.about);
