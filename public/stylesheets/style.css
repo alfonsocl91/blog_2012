@@ -2,6 +2,7 @@ body {
   padding: 20px;
   background-image: url("/images/bg.jpg");
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  color: #FFF;
 }
 
 a {
@@ -12,5 +13,17 @@ article {
   border: 2px solid #ffffff;
   padding: 7px;
   margin: 20px;
-  background-color: #e5f5ff;
+  background-color: #CCC;
+}
+#div_video{
+	width: 98%;
+	text-align: center;
+}
+
+#desarrolladores {
+	text-align: center;
+}
+
+#visitas {
+	text-align: right;
 }
