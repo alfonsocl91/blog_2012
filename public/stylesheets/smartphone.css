@@ -1,5 +1,6 @@
 body{
 	padding: 5px;
+	text-align: center;
 }
 
 #div_video{
@@ -27,4 +28,12 @@ nav{
 }
 #visitas{
 	text-align: center;
+}
+#blog{
+	width: 80%;
+}
+.imagenCentrada{
+  text-align: center;
+  padding: 10px;
+  width: 90%;
 }

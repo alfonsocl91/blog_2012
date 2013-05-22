@@ -21,11 +21,6 @@ html{
   margin-top: 1px;
   margin-left: 2px;
 }
-.imagenCentrada{
-  text-align: center;
-  padding: 10px;
-  width: 100%;
-}
 img{
   box-shadow: 5px 5px 5px #000;
 }
