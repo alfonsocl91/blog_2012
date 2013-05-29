@@ -221,6 +221,13 @@ app.put('/users/:userid([0-9]+)',
 //           userController.destroy);
 
 //---------------------
+//Favoritos
+
+app.put( '/users/:userid([0-9]+)/favourites/:postid([0-9]+)' , );
+app.delete('/users/:userid([0-9]+)/favourites/:postid([0-9]+)',  );
+app.get('/users/:userid([0-9]+)/favourites', );
+
+//---------------------
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
