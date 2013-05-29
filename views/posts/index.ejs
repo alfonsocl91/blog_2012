@@ -1,4 +1,15 @@
 
+<header>
+  <h2> Posts </h2>
+</header>
+
+<div id="busqueda">
+  <form method='get' action='/posts/search'>
+    <input type="text" id="search" size="23" name="search" placeholder="Posts with these words."/>
+    <input type="submit" value="Search">
+  </form>
+</div>
+
 <% for (var i in posts) { %>
   <div class="post">
     <div class="page-header">

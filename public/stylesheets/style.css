@@ -75,3 +75,19 @@ Comment
   line-height: 27px;
   color: inherit;
 }
+
+#div_video{
+  width: 80%;
+  text-align: center;
+}
+#video{
+  width: 97%;
+  display:block;
+  box-shadow: 10px 10px 10px;
+  box-shadow: 5px 5px 5px #000;
+  margin-bottom: 8px;
+}
+
+#about{
+  margin-right: 12px;
+}

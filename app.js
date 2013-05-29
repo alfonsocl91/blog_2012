@@ -8,17 +8,22 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , partials = require('express-partials')
+  , about = require('./routes/about')
   , sessionController = require('./routes/session_controller.js')
   , postController = require('./routes/post_controller.js')
   , userController = require('./routes/user_controller.js')
   , commentController = require('./routes/comment_controller.js')
-  , attachmentController = require('./routes/attachment_controller.js');
+  , attachmentController = require('./routes/attachment_controller.js')
+  , count = require('./count.js')
+  , search = require('./routes/search');;
 
 var util = require('util');
 
 var app = express();
 
 app.use(partials());
+
+app.use(count());
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -101,6 +106,12 @@ app.param('attachmentid', attachmentController.load);
 app.get('/login',  sessionController.new);
 app.post('/login', sessionController.create);
 app.get('/logout', sessionController.destroy);
+
+//---------------------
+
+app.get('/about', about.about);
+app.get('/Search', search.search);
+app.get('/posts/search', postController.search);
 
 //---------------------
 
