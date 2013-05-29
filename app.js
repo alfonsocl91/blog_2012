@@ -15,10 +15,10 @@ var express = require('express')
   , commentController = require('./routes/comment_controller.js')
   , attachmentController = require('./routes/attachment_controller.js')
   , count = require('./count.js')
-  , search = require('./routes/search');;
+  , search = require('./routes/search')
+  , timeOut = require('./timeOut.js');
 
 var util = require('util');
-
 var app = express();
 
 app.use(partials());
@@ -49,7 +49,7 @@ app.configure(function(){
 
      next();
   });
-
+  app.use(timeOut());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 });
@@ -221,7 +221,7 @@ app.put('/users/:userid([0-9]+)',
 //           userController.destroy);
 
 //---------------------
-
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
+

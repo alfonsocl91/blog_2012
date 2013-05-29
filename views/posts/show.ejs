@@ -2,6 +2,9 @@
 
  <div class="post">
     <div class="page-header">
+      <div id="star">
+        <a href="/favourite"><img src="../images/starG.png"></a>
+      </div>
       <h1>
         <%= post.title %>
         <small>por <em> <%= post.author && post.author.name || "Sin autor" %> </em></small>
@@ -10,7 +13,7 @@
    </div>
 
    <p><%- escapeText(post.body) %></p>
-
+   <i  style="font-size:15px"><%= comentarios %> comentarios.<i>
    <% if (session.user && session.user.id == post.authorId) {%>  
      <a href="/posts/<%= post.id %>/edit"> Editar </a>
    <% } %>

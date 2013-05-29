@@ -254,4 +254,18 @@ exports.autenticar = function(login, password, callback) {
         });
 }; 
 
+
+exports.actualizarTiempo = function(req, res){
+    models.User.find({where:{login:req.session.user.login}})
+        .success(function(user){
+            if(user){
+                var segundos = new Date().getTime()/1000;
+                user.time = segundos;
+            }
+        })
+        .error(function(err){
+            next(error);
+        });
+};
+
 //  ----------------------------------

@@ -1,12 +1,10 @@
 
 var models = require('../models/models.js');
 
-
 /*
 *  Auto-loading con app.param
 */
 exports.load = function(req, res, next, id) {
-
    models.Post
         .find({where: {id: Number(id)}})
         .success(function(post) {
@@ -43,18 +41,18 @@ exports.loggedUserIsAuthor = function(req, res, next) {
 
 // GET /posts
 exports.index = function(req, res, next) {
-
     var format = req.params.format || 'html';
     format = format.toLowerCase();
 
     models.Post
         .findAll({order: 'updatedAt DESC',
-	                include: [ { model: models.User, as: 'Author' } ]
+	                include: [ { model: models.User, as: 'Author' },
+                  models.Comment ]
 	      })
         .success(function(posts) {
 
           // console.log(posts);
-          
+            
             switch (format) { 
               case 'html':
               case 'htm':
@@ -118,7 +116,6 @@ exports.show = function(req, res, next) {
     models.User
         .find({where: {id: req.post.authorId}})
         .success(function(user) {
-
             // Si encuentro al autor lo añado como el atributo author, sino añado {}.
             req.post.author = user || {};
 
@@ -145,6 +142,7 @@ exports.show = function(req, res, next) {
                                 });
                                 res.render('posts/show', {
                                     post: req.post,
+                                    comentarios: comments.length,
                                     comments: comments,
                                     comment: new_comment,
                                     attachments: attachments
