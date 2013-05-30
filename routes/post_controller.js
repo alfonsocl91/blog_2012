@@ -45,10 +45,19 @@ exports.index = function(req, res, next) {
     format = format.toLowerCase();
 
     models.Post
+<<<<<<< HEAD
         .findAll({order: 'updatedAt DESC',
 	                include: [ { model: models.User, as: 'Author' },
                   models.Comment ]
 	      })
+=======
+        .findAll({
+            offset: req.pagination.offset,
+            limit:  req.pagination.limit,
+            order: 'updatedAt DESC',
+            include: [ { model: models.User, as: 'Author' } ]
+        })
+>>>>>>> origin
         .success(function(posts) {
 
           // console.log(posts);
@@ -125,9 +134,11 @@ exports.show = function(req, res, next) {
             
                   // Buscar comentarios
                   models.Comment
-                       .findAll({where: {postId: req.post.id},
-                                 order: 'updatedAt DESC',
-                                 include: [ { model: models.User, as: 'Author' } ] 
+                       .findAll({ offset: req.pagination.offset,
+                                  limit:  req.pagination.limit,
+                                  where: {postId: req.post.id},
+                                  order: 'updatedAt DESC',
+                                  include: [ { model: models.User, as: 'Author' } ] 
                        })
                        .success(function(comments) {
 

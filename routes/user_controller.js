@@ -45,7 +45,10 @@ exports.loggedUserIsUser = function(req, res, next) {
 exports.index = function(req, res, next) {
 
     models.User
-        .findAll({order: 'name'})
+        .findAll({ offset: req.pagination.offset,
+                   limit:  req.pagination.limit,
+                   order: 'name'
+                 })
         .success(function(users) {
             res.render('users/index', {
                 users: users

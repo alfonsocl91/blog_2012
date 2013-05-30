@@ -14,10 +14,14 @@ var express = require('express')
   , userController = require('./routes/user_controller.js')
   , commentController = require('./routes/comment_controller.js')
   , attachmentController = require('./routes/attachment_controller.js')
+<<<<<<< HEAD
   , favouriteController = require('./routes/favourite_controller.js')  //Para añadir favoritos
   , count = require('./count.js')
   , search = require('./routes/search')
   , timeOut = require('./timeOut.js');
+=======
+  , paginate = require('./routes/paginate.js').paginate;
+>>>>>>> origin
 
 var util = require('util');
 var app = express();
@@ -175,13 +179,22 @@ app.get('/orphancomments',
 
 //---------------------
 
-app.get('/posts.:format?', postController.index);
+app.get('/posts.:format?', 
+        function(req, res, next) {
+          paginate(req, res, next, 'Post');
+        },
+        postController.index);
 
 app.get('/posts/new', 
         sessionController.requiresLogin,
         postController.new);
 
-app.get('/posts/:postid([0-9]+).:format?', postController.show);
+app.get('/posts/:postid([0-9]+).:format?', 
+        function(req, res, next) {
+          paginate(req, res, next, 'Comment', {where: {postId: req.params.postid}});
+        },
+        postController.show);
+
 app.post('/posts', 
 	sessionController.requiresLogin,
         postController.create);
@@ -203,7 +216,12 @@ app.delete('/posts/:postid([0-9]+)',
 
 //---------------------
 
-app.get('/users', userController.index);
+app.get('/users', 
+        function(req, res, next) {
+          paginate(req, res, next, 'User');
+        },
+        userController.index);
+
 app.get('/users/new', userController.new);
 app.get('/users/:userid([0-9]+)', userController.show);
 app.post('/users', userController.create);
