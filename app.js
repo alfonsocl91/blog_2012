@@ -18,7 +18,6 @@ var express = require('express')
   , count = require('./count.js')
   , search = require('./routes/search')
   , timeOut = require('./timeOut.js');
-  , paginate = require('./routes/paginate.js').paginate;
 
 var util = require('util');
 var app = express();
@@ -102,6 +101,7 @@ app.param('postid', postController.load);
 app.param('userid', userController.load);
 app.param('commentid', commentController.load);
 app.param('attachmentid', attachmentController.load);
+app.param('favouriteid', favouriteController.load);
 
 //---------------------
 
@@ -111,7 +111,6 @@ app.get('/logout', sessionController.destroy);
 
 //---------------------
 
-app.get('/favourite', favourite.favourite);
 app.get('/about', about.about);
 app.get('/Search', search.search);
 app.get('/posts/search', postController.search);
@@ -177,9 +176,7 @@ app.get('/orphancomments',
 //---------------------
 
 app.get('/posts.:format?', 
-        function(req, res, next) {
-          paginate(req, res, next, 'Post');
-        },
+
         postController.index);
 
 app.get('/posts/new', 
@@ -187,9 +184,6 @@ app.get('/posts/new',
         postController.new);
 
 app.get('/posts/:postid([0-9]+).:format?', 
-        function(req, res, next) {
-          paginate(req, res, next, 'Comment', {where: {postId: req.params.postid}});
-        },
         postController.show);
 
 app.post('/posts', 
@@ -213,11 +207,7 @@ app.delete('/posts/:postid([0-9]+)',
 
 //---------------------
 
-app.get('/users', 
-        function(req, res, next) {
-          paginate(req, res, next, 'User');
-        },
-        userController.index);
+app.get('/users', userController.index);
 
 app.get('/users/new', userController.new);
 app.get('/users/:userid([0-9]+)', userController.show);
@@ -225,12 +215,12 @@ app.post('/users', userController.create);
 
 app.get('/users/:userid([0-9]+)/edit', 
         sessionController.requiresLogin,
-	userController.loggedUserIsUser,
+        userController.loggedUserIsUser,
         userController.edit);
 
 app.put('/users/:userid([0-9]+)', 
         sessionController.requiresLogin,
-	userController.loggedUserIsUser,
+        userController.loggedUserIsUser,
         userController.update);
 
 // app.delete('/users/:userid([0-9]+)', 
@@ -240,9 +230,18 @@ app.put('/users/:userid([0-9]+)',
 //---------------------
 //Favoritos
 
-app.put( '/users/:userid([0-9]+)/favourites/:postid([0-9]+)' , );
-app.delete('/users/:userid([0-9]+)/favourites/:postid([0-9]+)',  );
-app.get('/users/:userid([0-9]+)/favourites', );
+app.put( '/users/:userid([0-9]+)/favourites/:postid([0-9]+)',
+        sessionController.requiresLogin,
+        userController.loggedUserIsUser,
+        favouriteController.create);
+app.delete('/users/:userid([0-9]+)/favourites/:postid([0-9]+)', 
+        sessionController.requiresLogin,
+        userController.loggedUserIsUser,
+        favouriteController.destroy);
+app.get('/users/:userid([0-9]+)/favourites', 
+        sessionController.requiresLogin,
+        userController.loggedUserIsUser,
+        favouriteController.index);
 
 //---------------------
 http.createServer(app).listen(app.get('port'), function(){

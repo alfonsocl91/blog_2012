@@ -41,27 +41,18 @@ exports.loggedUserIsAuthor = function(req, res, next) {
 
 // GET /posts
 exports.index = function(req, res, next) {
+
     var format = req.params.format || 'html';
     format = format.toLowerCase();
 
     models.Post
-<<<<<<< HEAD
         .findAll({order: 'updatedAt DESC',
-	                include: [ { model: models.User, as: 'Author' },
+                  include: [ { model: models.User, as: 'Author' },
                   models.Comment ]
-	      })
-=======
-        .findAll({
-            offset: req.pagination.offset,
-            limit:  req.pagination.limit,
-            order: 'updatedAt DESC',
-            include: [ { model: models.User, as: 'Author' } ]
         })
->>>>>>> origin
         .success(function(posts) {
 
-          // console.log(posts);
-            
+          function renderizar() {
             switch (format) { 
               case 'html':
               case 'htm':
@@ -84,6 +75,46 @@ exports.index = function(req, res, next) {
                   console.log('No se soporta el formato \".'+format+'\" pedido para \"'+req.url+'\".');
                   res.send(406);
             }
+          }
+
+          // Array que indica qué post es favorito y cuál no
+          res.locals.comprobarFavorito = [];
+          
+          if (req.session.user && posts.length > 0) {
+              for (var i in posts) {
+                if (i < posts.length - 1) {
+                  // Comprueba si es favorito del usuario
+                  models.Favourite.find({where: {userId: req.session.user.id, postId: posts[i].id}}).success(function(favourite) {
+                    if(favourite != null) {
+                      console.log("Es favorito");
+                      res.locals.comprobarFavorito.push(true);
+                    } else {
+                      console.log("No es favorito");
+                      res.locals.comprobarFavorito.push(false);
+                    }
+                  }).error(function(error){
+                    next(error);
+                  });
+                } else if(i == posts.length - 1) {
+                  // Comprueba si es favorito del usuario y renderiza la vista
+                  models.Favourite.find({where: {userId: req.session.user.id, postId: posts[i].id}}).success(function(favourite) {
+                    if(favourite != null) {
+                      console.log("Es favorito");
+                      res.locals.comprobarFavorito.push(true);
+                    } else {
+                      console.log("No es favorito");
+                      res.locals.comprobarFavorito.push(false);
+                    }
+                    renderizar();
+                  }).error(function(error){
+                    next(error);
+                  });
+                }
+             }
+          } else {
+            renderizar();
+          }
+ 
         })
         .error(function(error) {
             next(error);
@@ -128,14 +159,25 @@ exports.show = function(req, res, next) {
             // Si encuentro al autor lo añado como el atributo author, sino añado {}.
             req.post.author = user || {};
 
+            if(req.session.user){
+              models.Favourite.find({where: {userId: req.session.user.id, postId: req.post.id}}).success(function(favourite){
+                if(favourite != null){
+                  res.locals.comprobarFavorito = true;
+                  console.log("Añadido a favoritos");
+                }
+                else{
+                  res.locals.comprobarFavorito = false;
+                  console.log("Eliminado de favoritos");
+                }
+              });
+            }
             // Buscar Adjuntos
             req.post.getAttachments({order: 'updatedAt DESC'})
                .success(function(attachments) {
             
                   // Buscar comentarios
                   models.Comment
-                       .findAll({ offset: req.pagination.offset,
-                                  limit:  req.pagination.limit,
+                       .findAll({ 
                                   where: {postId: req.post.id},
                                   order: 'updatedAt DESC',
                                   include: [ { model: models.User, as: 'Author' } ] 
@@ -384,3 +426,4 @@ exports.search = function(req, res, next) {
             next(error);
         });
 };
+

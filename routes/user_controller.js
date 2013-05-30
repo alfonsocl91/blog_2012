@@ -45,8 +45,7 @@ exports.loggedUserIsUser = function(req, res, next) {
 exports.index = function(req, res, next) {
 
     models.User
-        .findAll({ offset: req.pagination.offset,
-                   limit:  req.pagination.limit,
+        .findAll({
                    order: 'name'
                  })
         .success(function(users) {
@@ -262,13 +261,13 @@ exports.actualizarTiempo = function(req, res){
     models.User.find({where:{login:req.session.user.login}})
         .success(function(user){
             if(user){
+                console.log("tiempo actualizado");
                 var segundos = new Date().getTime()/1000;
-                user.time = segundos;
+                req.session.user.time = segundos;
             }
         })
         .error(function(err){
             next(error);
         });
 };
-
 //  ----------------------------------

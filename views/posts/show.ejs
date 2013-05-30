@@ -3,12 +3,18 @@
  <div class="post">
     <div class="page-header">
       <div id="star">
-        <% if ( session ) { %>
+        <% if (session) { %>
           <% if ( session.user ) { %>
-            <% if ( !post.favourite ) { %>
-              <a href="/favourite"><img src="../images/starG.png"></a>
+            <% if ( !comprobarFavorito ) { %>
+                <form method='post' action='/users/<%= session.user.id %>/favourites/<%= post.id %>'>
+                  <input type='hidden' name='_method' value='put'>
+                  <input type='image' src='../images/starG.png'>
+                </form>
             <% } else {%>
-              <a href="/favourite"><img src="../images/starY.png"></a>
+                <form method='post' action='/users/<%= session.user.id %>/favourites/<%= post.id %>'>
+                  <input type='hidden' name='_method' value='delete'>
+                  <input type='image' src='../images/starY.png'>
+                </form>
             <% } %>
           <% } %>
         <% } %>
