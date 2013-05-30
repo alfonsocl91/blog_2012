@@ -3,15 +3,7 @@
  <div class="post">
     <div class="page-header">
       <div id="star">
-        <% if ( session ) { %>
-          <% if ( session.user ) { %>
-            <% if ( !post.favourite ) { %>
-              <a href="/favourite"><img src="../images/starG.png"></a>
-            <% } else {%>
-              <a href="/favourite"><img src="../images/starY.png"></a>
-            <% } %>
-          <% } %>
-        <% } %>
+        <a href="/favourite"><img src="../images/starG.png"></a>
       </div>
       <h1>
         <%= post.title %>
