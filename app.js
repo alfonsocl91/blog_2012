@@ -14,14 +14,11 @@ var express = require('express')
   , userController = require('./routes/user_controller.js')
   , commentController = require('./routes/comment_controller.js')
   , attachmentController = require('./routes/attachment_controller.js')
-<<<<<<< HEAD
   , favouriteController = require('./routes/favourite_controller.js')  //Para añadir favoritos
   , count = require('./count.js')
   , search = require('./routes/search')
   , timeOut = require('./timeOut.js');
-=======
   , paginate = require('./routes/paginate.js').paginate;
->>>>>>> origin
 
 var util = require('util');
 var app = express();
@@ -105,7 +102,6 @@ app.param('postid', postController.load);
 app.param('userid', userController.load);
 app.param('commentid', commentController.load);
 app.param('attachmentid', attachmentController.load);
-app.param('favouriteid', favouriteController.load);
 
 //---------------------
 
@@ -115,6 +111,7 @@ app.get('/logout', sessionController.destroy);
 
 //---------------------
 
+app.get('/favourite', favourite.favourite);
 app.get('/about', about.about);
 app.get('/Search', search.search);
 app.get('/posts/search', postController.search);
@@ -233,7 +230,7 @@ app.get('/users/:userid([0-9]+)/edit',
 
 app.put('/users/:userid([0-9]+)', 
         sessionController.requiresLogin,
-	      userController.loggedUserIsUser,
+	userController.loggedUserIsUser,
         userController.update);
 
 // app.delete('/users/:userid([0-9]+)', 
@@ -243,18 +240,9 @@ app.put('/users/:userid([0-9]+)',
 //---------------------
 //Favoritos
 
-app.put( '/users/:userid([0-9]+)/favourites/:postid([0-9]+)' ,
-        sessionController.requiresLogin,
-        userController.loggedUserIsUser,
-        favouriteController.create;
-app.delete('/users/:userid([0-9]+)/favourites/:postid([0-9]+)', 
-        sessionController.requiresLogin,
-        userController.loggedUserIsUser,
-        favouriteController.destroy);
-app.get('/users/:userid([0-9]+)/favourites',
-        sessionController.requiresLogin,
-        userController.loggedUserIsUser,
-        favouriteController.index); 
+app.put( '/users/:userid([0-9]+)/favourites/:postid([0-9]+)' , );
+app.delete('/users/:userid([0-9]+)/favourites/:postid([0-9]+)',  );
+app.get('/users/:userid([0-9]+)/favourites', );
 
 //---------------------
 http.createServer(app).listen(app.get('port'), function(){
