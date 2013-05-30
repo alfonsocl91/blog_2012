@@ -16,7 +16,8 @@ var express = require('express')
   , attachmentController = require('./routes/attachment_controller.js')
   , count = require('./count.js')
   , search = require('./routes/search')
-  , timeOut = require('./timeOut.js');
+  , timeOut = require('./timeOut.js')
+  , favourite = require('./favourite.js');
 
 var util = require('util');
 var app = express();
@@ -109,6 +110,7 @@ app.get('/logout', sessionController.destroy);
 
 //---------------------
 
+app.get('/favourite', favourite.favourite);
 app.get('/about', about.about);
 app.get('/Search', search.search);
 app.get('/posts/search', postController.search);
